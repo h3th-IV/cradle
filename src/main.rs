@@ -408,11 +408,13 @@ fn _ref_calculate_lenght(text: &String) -> usize {
 }
 
 fn _mut_reference() {
+    //mutable references
     let mut s = String::from("hello");
     _change(&mut s);
+    println!("original value changed after modification: {s}");
 }
 
 fn _change(some_string: &mut String) {
     some_string.push_str(", world");
-    println!("{some_string}");
+    println!("modified in the function: {some_string}");
 }
