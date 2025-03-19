@@ -409,10 +409,10 @@ fn _ref_calculate_lenght(text: &String) -> usize {
 
 fn _mut_reference() {
     let mut s = String::from("hello");
-    let new = _change(&mut s);
-    println!("change function: {:?}", new);
+    _change(&mut s);
 }
 
 fn _change(some_string: &mut String) {
-    some_string.push_str(", world")
+    some_string.push_str(", world");
+    println!("{some_string}");
 }
