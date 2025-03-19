@@ -3,6 +3,9 @@ use std::collections::VecDeque;
 
 fn main() {
     println!("Hello, world!");
+    let greeting_mesage = String::from("Hello World");
+    let hello = _first_word(&greeting_mesage);
+    println!("{hello}");
 }
 
 fn _primitive_types() {
@@ -417,4 +420,63 @@ fn _mut_reference() {
 fn _change(some_string: &mut String) {
     some_string.push_str(", world");
     println!("modified in the function: {some_string}");
+}
+
+//we can not have more than one mutable reference of a value
+fn _only_one_mut_ref() {
+    let mut s = String::from("Hello");
+    let x = &mut s;
+    println!("{x}");
+    let y = &mut s;
+    println!("{y}");
+    //this will cause race conditions as two vars are trying to mutate the same mem location concurrently(data race)
+    // println!("{x}, {y}");
+    //or use seperate scope
+    let mut s = String::from("hello");
+    {
+        let _r1 = &mut s;
+    } // r1 goes out of scope here, so we can make a new reference with no problems.
+    let _r2 = &mut s;
+}
+
+//we can not have a mutable and immutable reference together
+fn _no_mut_and_imut_ref() {
+    // let mut s = String::from("hello");
+    // let r1 = &s; // no problem
+    // let r2 = &s; // no problem
+    // let r3 = &mut s; // BIG PROBLEM:cannot borrow `s` as mutable because it is also borrowed as immutable
+    // println!("{}, {}, and {}", r1, r2, r3); //this will return error
+
+    let mut s = String::from("hello");
+    let r1 = &s; // no problem
+    let r2 = &s; // no problem
+    println!("{r1} and {r2}");
+    //variables r1 and r2 will not be used after this point
+    let r3 = &mut s; //no problem
+    println!("{r3}");
+}
+
+fn _string_slice() {
+    let name = String::from("Thread Miller");
+    let first_name = &name[0..6]; // or use [..6]
+    let last_name = &name[7..name.len()]; //or use [7..]
+
+    println!("my First Name is {first_name}, my Last Name is {last_name}, hence {name}");
+
+    let user_name = "Thread Miller";
+    let f_name = &user_name[..6];
+    println!("{f_name}");
+}
+
+fn _first_word(text: &str) -> &str {
+    //convert text to an array of bytes.
+    let string_byte = text.as_bytes();
+    //enumerate returns a tuple containg index and item(value), hence we destructure it
+    for (i, &item) in string_byte.iter().enumerate() {
+        //check if item equals the binary representation of space
+        if item == b' ' {
+            return &text[..i]; //return all ietm from the begining to current position
+        }
+    }
+    &text[..] //return all item if no space is found.
 }
