@@ -480,3 +480,104 @@ fn _first_word(text: &str) -> &str {
     }
     &text[..] //return all item if no space is found.
 }
+
+//STRUCT
+struct User {
+    email: String,
+    last_name: String,
+    password: String,
+    active: bool
+}
+//create an instance of struct
+fn build_user(email: String, name: String, password: String) -> User{
+    User { email, last_name: name, password, active: true }
+}
+fn structs(){
+    //use build function to instantiate a new struct
+    let name: String = String::from("Thread");
+    let email: String = String::from("threadmiller@clother.com");
+    let user1: User = build_user(email, name, String::from("password"));
+
+    //we could also use an existing struct to create a new struct
+    let email2: String = String::from("woolermiller@clother.com");
+    let user2 = User{
+        email: email2,
+        ..user1
+    };
+    println!("user1 name cannot be used anymore here since it's value has been moved to user2. name, ");
+    println!("user1 email is {}", user1.email);
+}
+
+//tuple struct
+fn tuple_struct(){
+    struct Color(i32, i32, i32); //tuple struct dont have named fields just types.
+
+    let black: Color = Color(0, 0, 0);
+}
+
+//unit-likje structs
+fn unit_like(){
+    struct AlwaysEqual; //dont have fields just name, can be used to implement traits on types.
+}
+
+
+//a derived type like structs cannot be debugged with the println!() macro
+//we add the attribute #[derive(Debug)] before struct definition
+
+#[derive(Debug)]
+struct Human {
+    race: String,
+    name: String,
+    age: u8,
+    height: f64,
+}
+
+fn print_derived_type(){
+    let race: String = String::from("African");
+    let name: String = String::from("Khem");
+    let age: u8 = 40;
+    let height: f64 = 5.5;
+    let new_human: Human = Human { race, name, age, height};
+    println!("A human struct representation printed, {new_human:#?}");
+
+    //use dbg! macro to print to stderr
+    dbg!(&new_human);
+}
+
+//struct and methods
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+//methods defined in the impl block
+impl Rectangle {
+    //calc the area of rectangle
+    fn area(&self) -> u32{
+        self.width * self.height
+    }
+
+    //return the width
+    fn width(&self) -> u32{
+        self.width
+    }
+
+    //associated functions; this does not take in &self as their first parameter, therefore, they are not methods, they can be used as constructors, they are called with the namespace syntax "::" e.g Rectangle::square(3)
+    
+    //square is an associated function, that creates a rectangle with equal sides
+    fn square(size: u32) -> Self {
+        Self { width:size, height: size }
+    }
+}
+
+fn use_methods(){
+    let rect: Rectangle = Rectangle { width: 30, height: 40 };
+    //debug the area calculation
+    dbg!(rect.area());
+
+    //print the width to standard output
+    println!("the width of the rectangle {rect:#?} is {}", rect.width());
+
+    let new_square: Rectangle = Rectangle::square(40);
+}
