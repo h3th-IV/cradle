@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::collections::VecDeque;
 
+
 fn main() {
     println!("Hello, world!");
     let greeting_mesage = String::from("Hello World");
@@ -580,4 +581,101 @@ fn use_methods(){
     println!("the width of the rectangle {rect:#?} is {}", rect.width());
 
     let new_square: Rectangle = Rectangle::square(40);
+}
+
+//enum are types that can have one specific variants, e.g a shape can be a circle, triangle e.t.c
+enum Shape {
+    Triangle,
+    Circle,
+    Rectangle,
+    Square,
+}
+
+//variants are namedspace from their enum type
+
+//this will match which shape which is passed to it
+fn use_enum(shape: Shape) -> String{
+    match shape {
+        Shape::Triangle => String::from("Shape Triangle"),
+        Shape::Circle => String::from("Shape Circle"),
+        Shape::Rectangle => String::from("Shape Rectangle"),
+        Shape::Square => String::from("Shape Square"),
+    }
+}
+
+fn get_shape(){
+    let circle: Shape = Shape::Circle;
+    println!("{}", use_enum(circle)); //this will print Shape Circle
+}
+
+
+//use of predefined enums; Option and Result
+/*
+    Option is used to handle situations where a value may or may not be present.
+    enums Option<T>{
+        Some<T>,
+        None,
+    }
+
+    - Some(T) represents a value of type T that is present.
+    - None represents the absence of a value.
+
+    Result is used to handle situations where a computation may succeed or fail.
+    enums Result<T, E>{
+        Ok(T),
+        Err(E),
+    }
+
+    - Ok(T) represents a successful outcome with a value of type T.
+;   - Err(E) represents an error with a value of type E.
+ */
+
+//usage
+
+//option usage
+fn match_name_by_id(id: i32) -> Option<String>{
+    match id {
+        1 => Some("Thread Miller".to_string()),
+        2 => Some("Wooler Miller".to_string()),
+        3 => Some("Seamer Miller".to_string()),
+        _ => None, //any other value will default to None
+    }
+}
+
+
+// result usage
+fn do_div(num: i32, denom: i32) -> Result<i32, &'static str> {
+    if denom == 0{
+        Err("cannot do division by 0")
+    } else{
+        Ok(num/denom)
+    }
+}
+
+fn match_div(){
+    let num: i32 = 45;
+    let denom: i32 = 15;
+    match do_div(num, denom) {
+        Ok(result) => println!("Result: {}", result),
+        Err(err) => println!("{}", err)
+    }
+    //result and err captures the result returned for each  of the variants
+}
+
+enum IpAddr {
+    v4,
+    v6
+}
+
+fn match_with_match(ipaddr: &IpAddr) {
+    match ipaddr {
+        IpAddr::v4 => println!("ip address version 4"),
+        _ => ()
+    }
+}
+
+fn match_with_if_let(ipaddr: &IpAddr) {
+    if let IpAddr::v4 = ipaddr{
+        println!("ip address version 4")
+    }
 }
