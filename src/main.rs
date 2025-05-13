@@ -679,3 +679,44 @@ fn match_with_if_let(ipaddr: &IpAddr) {
         println!("ip address version 4")
     }
 }
+
+fn check_fuel(){}
+
+pub mod drive_car{
+    pub fn turn(direction: &str){
+        let tire_direction:Tires = engage_tires(direction);
+        println!("front tires will move like so, {} while rear tires {}", tire_direction.front, tire_direction.rear)
+    }
+
+    fn engage_tires(direction: &str) -> Tires{
+        let tires: Tires = Tires { front: String::from(direction), rear: String::from("drag") };
+        tires
+    }
+
+    pub fn drift_tires(direction: &str) -> Tires{
+        let tires: Tires = Tires { front: String::from(direction), rear: String::from("drag") };
+        tires
+    }
+
+    pub fn reverse(){
+        super::check_fuel(); //to use item in the parent module we use the super keyword like ../check_fuel
+    }
+
+    pub fn drive(){
+        super::check_fuel();
+    }
+
+    pub struct Tires{
+        pub front: String,
+        rear: String
+    }
+}
+
+fn main_test(){
+    drive_car::reverse(); //reverse is a public fn in the drive
+    drive_car::drive();
+
+    let drift_dir: drive_car::Tires = drive_car::drift_tires("left_corner");
+    println!("a sharp left ahead, drift: {}", drift_dir.front);
+    // println!("will the rear tires {}", drift_dir.rear); //error here since rear field is private
+}
